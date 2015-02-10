@@ -40,6 +40,16 @@
             max-height: 200px;
             overflow: auto;
         }
+        .TableBox > div::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .TableBox > div::-webkit-scrollbar-thumb {
+            background: grey;
+        }
+        .TableBox > div::-webkit-scrollbar-corner {
+            background: black;
+        }
         .TableBox table {
             width: 100%;
         }
@@ -310,6 +320,7 @@
                 <input type="button" id="connectButton" value="Connect" />
                 <a href="javascript:;" style="float:right" title="Group by Name" id="posGblB">GBL</a>
                 <a href="javascript:;" style="float:right" title="Random position" id="posRndB">RND</a>
+                <a href="javascript:;" style="float:right" title="Position in grid" id="posGrdB">GRD</a>
             </form>
 
         </div>
@@ -368,6 +379,28 @@
                     for (var i=0; i<boxes.length; i++) {
                         var b = boxes[i];
                         moveBoxTo(b, getRandomPosition(b));
+                    }
+                });
+                document.getElementById('posGrdB').addEventListener('click', function() {
+                    var limW = window.innertWidth;
+                    var limH = window.innerHeight;
+                    var maxH = 0;
+                    var totW = 0;
+                    var x = 0;
+                    var y = 0;
+                    for (var i=0; i<boxes.length; i++) {
+                        var b = boxes[i];
+                        var r = b.getBoundingClientRect();
+
+                        if ((x + r.width) >= window.innerWidth) {
+                            x = 0;
+                            y += maxH;
+                        }
+
+                        b.style.left = x + 'px';
+                        b.style.top = y + 'px';
+                        x += r.width;
+                        maxH = Math.max(maxH, r.height);
                     }
                 });
             })();
